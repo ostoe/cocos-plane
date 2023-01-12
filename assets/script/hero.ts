@@ -12,6 +12,8 @@ import {
   director,
   AudioClip,
   AudioSourceComponent,
+  Collider2D,
+  IPhysics2DContact,
 } from "cc";
 import { bulletPool, GameControl } from "./const";
 const { ccclass, property } = _decorator;
@@ -27,6 +29,7 @@ const { ccclass, property } = _decorator;
  * ManualUrl = https://docs.cocos.com/creator/3.3/manual/zh/
  *
  */
+const MAX_FIRE_LEVEL = 255;
 
 @ccclass("Hero")
 export class Hero extends Component {
@@ -54,7 +57,7 @@ export class Hero extends Component {
 
   private locked: boolean = false;
   private localOffset: Vec3;
-
+  private level: number = 1;
   onLoad() {}
 
   start() {
@@ -62,9 +65,20 @@ export class Hero extends Component {
     collider.on(Contact2DType.BEGIN_CONTACT, this.onBeinContact, this);
   }
 
-  onBeinContact() {
-    GameControl.end();
-    this.node.parent.addChild(instantiate(this.endWindowPrefab));
+  onBeinContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
+    // console.log(selfCollider.node, otherCollider.node.name,  )
+    switch (otherCollider.node.name) {
+      case 'enemy':
+        GameControl.end();
+        this.node.parent.addChild(instantiate(this.endWindowPrefab));
+        break;
+      case 'boost-mogu':
+        !(this.level <= MAX_FIRE_LEVEL) || (this.level += 1);
+        break;
+      default:
+        break;
+    }
+    
   }
 
   onEnable() {
