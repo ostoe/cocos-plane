@@ -7,11 +7,12 @@ import {
   PhysicsSystem2D,
   Contact2DType,
   Vec3,
+  math,
 } from "cc";
 import { bulletPool, GameControl } from "./const";
 const { ccclass, property } = _decorator;
 
-
+//  ref: https://blog.csdn.net/ykl970719/article/details/124106963https://blog.csdn.net/ykl970719/article/details/124106963
 
 @ccclass("Bullet")
 export class Bullet extends Component {
@@ -21,6 +22,7 @@ export class Bullet extends Component {
   // [2]
   @property
   speed: number = 800;
+
 
   start() {
     const collider = this.getComponent(BoxCollider2D);
@@ -33,10 +35,19 @@ export class Bullet extends Component {
   }
 
   update(deltaTime: number) {
+    // console.log("mat")
+    if (this.node.rotation != new math.Quat(0, 0, 0, 0) ) { // todo
+      // 直飞
+      this.node.translate(new Vec3(0, this.speed * deltaTime, 0));
+      
+
+    } else {// 有角度
+      // this.x += Math.round(this[__.speed] * Math.sin(this.angle/180*Math.PI))
+      // this.y -= Math.round(this[__.speed] * Math.cos(this.angle/180*Math.PI))
+    }
     // [4]
-    this.node.translate(new Vec3(0, this.speed * deltaTime, 0));
     // this.node.setPosition(this.node.position.add3f(0,this.speed * deltaTime,0));
-    if (this.node.position.y > 667) {
+    if (this.node.position.y > 667) { // (this.y < -this.height || this.x < -this.width || this.x > screenWidth) 
       this._removeFromParent();
     }
   }
