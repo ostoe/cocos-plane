@@ -10,10 +10,11 @@ import {
   AnimationClip,
   randomRange,
   AudioClip,
-  AudioSourceComponent,
+  AudioSourceComponent,Prefab,instantiate
 } from "cc";
+import { BoostMogu } from "./boost-mogu";
 const { ccclass, property } = _decorator;
-import { planetPool } from "./const";
+import { planetPool, boostPool } from "./const";
 
 /**
  * Predefined variables
@@ -35,10 +36,15 @@ export class Enemy extends Component {
   @property
   speed: number = 200;
 
+  @property(Prefab)
+  boostMoguPrefab: Prefab;
+
+
+
   private _animation: Animation;
   private _audio: AudioSourceComponent;
   private hasDied = false;
-
+  public GenBoostThreshold = 0.8;
   start() {
     this._animation = this.getComponent(Animation);
     this._audio = this.getComponent(AudioSourceComponent);
@@ -71,6 +77,16 @@ export class Enemy extends Component {
     this.hasDied = true;
     this._audio.play();
     this._animation.play("bom");
+    if (Math.random() < this.GenBoostThreshold ) {
+      let b = boostPool.get();
+      if (b) {
+        b.getComponent(BoostMogu);
+      } else {
+        b = instantiate(this.boostMoguPrefab);
+      }
+      b.setPosition(this.node.position);
+      this.node.parent.addChild(b)
+    }
   }
 
   _removeFromParent() {

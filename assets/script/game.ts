@@ -6,6 +6,7 @@ import {
   Prefab,
   randomRange,
   Vec3,
+  
 } from "cc";
 const { ccclass, property } = _decorator;
 
@@ -35,6 +36,7 @@ export class Game extends Component {
 
   @property(Prefab)
   planPrefab: Prefab;
+
 
   onLoad() {}
 

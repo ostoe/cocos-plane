@@ -7,7 +7,7 @@ import {
   PhysicsSystem2D,
   Contact2DType,
   Vec3,
-  math,
+  math, view
 } from "cc";
 import { bulletPool, GameControl } from "./const";
 const { ccclass, property } = _decorator;
@@ -23,10 +23,14 @@ export class Bullet extends Component {
   @property
   speed: number = 800;
 
-
+  private screenSize = view.getVisibleSize()
   start() {
     const collider = this.getComponent(BoxCollider2D);
     collider.on(Contact2DType.BEGIN_CONTACT, this.onBeinContact, this);
+  }
+
+  fixedAngle(angle: number) {
+    this.node.angle = angle;
   }
 
   onBeinContact() {
@@ -35,25 +39,31 @@ export class Bullet extends Component {
   }
 
   update(deltaTime: number) {
-    // console.log("mat")
-    if (this.node.rotation != new math.Quat(0, 0, 0, 0) ) { // todo
+    if (this.node.angle == 0 ) { // todo
       // 直飞
       this.node.translate(new Vec3(0, this.speed * deltaTime, 0));
-      
-
     } else {// 有角度
-      // this.x += Math.round(this[__.speed] * Math.sin(this.angle/180*Math.PI))
-      // this.y -= Math.round(this[__.speed] * Math.cos(this.angle/180*Math.PI))
+      let anglePI = this.node.angle / 180 * Math.PI;
+      // 这种方式也可以
+      // this.node.setPosition(this.node.getPosition().add3f(this.speed * deltaTime * Math.sin(-anglePI), this.speed * deltaTime * Math.cos(anglePI), 0));
+      // console.log("has angle", this.speed * deltaTime * Math.sin(anglePI),this.speed * deltaTime * Math.cos(anglePI),);
+      // this.node.translate(new Vec3(
+      //   ,
+      //   this.speed * deltaTime * Math.cos(anglePI), 
+      //   0
+      // ))
+      this.node.translate(new Vec3(0, this.speed * deltaTime, 0));
     }
     // [4]
     // this.node.setPosition(this.node.position.add3f(0,this.speed * deltaTime,0));
-    if (this.node.position.y > 667) { // (this.y < -this.height || this.x < -this.width || this.x > screenWidth) 
+    let pos = this.node.position
+    if (pos.y > this.screenSize.height/2 + 100 || pos.x < -this.screenSize.width/2 -100 || pos.x > this.screenSize.width/2 + 100) { // (this.y < -this.height || this.x < -this.width || this.x > screenWidth) 
       this._removeFromParent();
     }
   }
 
   _removeFromParent() {
-    this.node.removeFromParent();
+    // this.node.removeFromParent();
     bulletPool.put(this.node);
   }
 }

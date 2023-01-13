@@ -14,10 +14,24 @@ import {
   AudioSourceComponent,
   Collider2D,
   IPhysics2DContact,
+  view,
 } from "cc";
-import { bulletPool, GameControl } from "./const";
+import { Bullet } from "./bullet";
+import { bulletPool, fireMode, GameControl } from "./const";
 const { ccclass, property } = _decorator;
-
+const BULLET_LEVEL = {
+  0: [0],
+  1: [-5, 5],
+  2: [-5, 0, 5],
+  3: [-10, -5, 0, 5],
+  4: [-10, -5, 0, 5, 10],
+  5: [-15, -10, -5, 0, 5, 10],
+  6: [-15, -10, -5, 0, 5, 10, 15],
+  7: [-30, -15, -10, -5, 0, 5, 10, 15],
+  8: [-30, -15, -10, -5, 0, 5, 10, 15, 30],
+  9: [-30, -15, -10, -5, 0, 5, 10, 15, 30],
+  10: [-30, -22, -15, -10, -5, 0, 5, 10, 15, 22, 30],
+}
 /**
  * Predefined variables
  * Name = Hero
@@ -29,7 +43,6 @@ const { ccclass, property } = _decorator;
  * ManualUrl = https://docs.cocos.com/creator/3.3/manual/zh/
  *
  */
-const MAX_FIRE_LEVEL = 255;
 
 @ccclass("Hero")
 export class Hero extends Component {
@@ -58,6 +71,8 @@ export class Hero extends Component {
   private locked: boolean = false;
   private localOffset: Vec3;
   private level: number = 1;
+  // public fireLevel = 0;
+  
   onLoad() {}
 
   start() {
@@ -72,9 +87,9 @@ export class Hero extends Component {
         GameControl.end();
         this.node.parent.addChild(instantiate(this.endWindowPrefab));
         break;
-      case 'boost-mogu':
-        !(this.level <= MAX_FIRE_LEVEL) || (this.level += 1);
-        break;
+      // case 'boost-mogu':
+      //   !(this.level <= MAX_FIRE_LEVEL) || (this.fireLevel += 1);
+      //   break;
       default:
         break;
     }
@@ -131,19 +146,33 @@ export class Hero extends Component {
     return result;
   }
 
-  generateBullet() {
-    let b = bulletPool.get();
-    if (!b) {
+  generateBullet(angle: number) {
+    
+    let b = bulletPool.get(); // 有返回Node
+    if (!b) { // 有Node对象
       b = instantiate(this.bulletPrefab);
     }
+    b.getComponent(Bullet).fixedAngle(angle)
     b.setPosition(this.node.position);
     return b;
   }
 
   authoShut() {
-    const bullet = this.generateBullet();
+    let index = 0;
+    if (fireMode.level == 0 ) {
+      const bullet = this.generateBullet(0);
+      this.bulletPoolNode.insertChild(bullet, 0);
+    } else if (fireMode.level <=fireMode.MAX_FIRE_LEVEL) {
+      BULLET_LEVEL[fireMode.level].forEach((angle: number) => {
+        const bullet = this.generateBullet(angle);
+        this.bulletPoolNode.addChild(bullet);
+        // this.bulletPoolNode.insertChild(bullet, 0);
+        index++;
+      });
+      index = 0;
+    }
     this.getComponent(AudioSourceComponent).play();
-    this.bulletPoolNode.insertChild(bullet, 0);
+    
   }
 }
 
