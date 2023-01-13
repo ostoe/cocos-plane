@@ -1,35 +1,51 @@
 import {
   _decorator,
   Component,
-  BoxCollider2D,
+  CircleCollider2D,
   CollisionEventType,
   Node,
   PhysicsSystem2D,
   Contact2DType,
   Vec3,
 } from "cc";
-import { bulletPool, GameControl } from "./const";
+import { fireMode, GameControl, screenSize } from "./const";
 const { ccclass, property } = _decorator;
 
+const randomAngle = [10, -10, 30, -30, 15, -15, 5, -5, 5, -5, 0, 0, 0];
 
 
 @ccclass("BoostMogu")
 export class BoostMogu extends Component {
   // [1]
   // dummy = '';
+  @property
+  angle = 0;
 
+  @property
+  speed: number = 200;
 
   start() {
-    const collider = this.getComponent(BoxCollider2D);
+    this.node.angle = randomAngle[~~(Math.random() * randomAngle.length)]
+    const collider = this.getComponent(CircleCollider2D);
     collider.on(Contact2DType.BEGIN_CONTACT, this.onBeinContact, this);
   }
 
   onBeinContact() {
-
+    this.node.removeFromParent();
+    !(fireMode.level < fireMode.MAX_FIRE_LEVEL) || (fireMode.level += 1);
+    console.log("level:", fireMode.level);
   }
 
   update(deltaTime: number) {
+    
+    this.node.translate(new Vec3(0, -deltaTime * this.speed, 0))
 
+    if ( this.node.position.x <  -screenSize.x/2 || this.node.position.x > screenSize.x/2) {
+      this.node.angle = -this.node.angle;
+    }
+    if (this.node.position.y < -screenSize.y / 2 - 100) {
+      this.node.removeFromParent();
+    }
   }
 
 }
