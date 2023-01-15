@@ -7,6 +7,7 @@ import {
   PhysicsSystem2D,
   Contact2DType,
   Vec3,
+  AudioSourceComponent,
 } from "cc";
 import { fireMode, GameControl, screenSize } from "./const";
 const { ccclass, property } = _decorator;
@@ -14,8 +15,8 @@ const { ccclass, property } = _decorator;
 const randomAngle = [10, -10, 30, -30, 15, -15, 5, -5, 5, -5, 0, 0, 0];
 
 
-@ccclass("BoostMogu")
-export class BoostMogu extends Component {
+@ccclass("BoostMoguStar")
+export class BoostMoguStar extends Component {
   // [1]
   // dummy = '';
   @property
@@ -24,16 +25,23 @@ export class BoostMogu extends Component {
   @property
   speed: number = 200;
 
+  private _audio: AudioSourceComponent
+
   start() {
+    this._audio = this.getComponent(AudioSourceComponent);
     this.node.angle = randomAngle[~~(Math.random() * randomAngle.length)]
     const collider = this.getComponent(CircleCollider2D);
     collider.on(Contact2DType.BEGIN_CONTACT, this.onBeinContact, this);
   }
 
+  reset() {
+    
+  }
+
   onBeinContact() {
     this.node.removeFromParent();
-    !(fireMode.level < fireMode.MAX_FIRE_LEVEL) || (fireMode.level += 1);
-    console.log("level:", fireMode.level);
+    // !(fireMode.level < fireMode.MAX_FIRE_LEVEL) || (fireMode.level += 1);
+    this._audio.play();
   }
 
   update(deltaTime: number) {

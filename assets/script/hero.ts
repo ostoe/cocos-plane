@@ -15,6 +15,7 @@ import {
   Collider2D,
   IPhysics2DContact,
   view,
+  ProgressBar,
 } from "cc";
 import { Bullet } from "./bullet";
 import { bulletPool, fireMode, GameControl } from "./const";
@@ -72,26 +73,32 @@ export class Hero extends Component {
   private localOffset: Vec3;
   private level: number = 1;
   // public fireLevel = 0;
-  
+  private collectionProgressBar: ProgressBar;
   onLoad() {}
 
   start() {
     const collider = this.getComponent(BoxCollider2D);
     collider.on(Contact2DType.BEGIN_CONTACT, this.onBeinContact, this);
+    this.collectionProgressBar = this.node.children[0].getComponent(ProgressBar);
+    console.log(this.collectionProgressBar);
+    this.collectionProgressBar.progress = 0;
   }
 
   onBeinContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
     // console.log(selfCollider.node, otherCollider.node.name,  )
-    switch (otherCollider.node.name) {
-      case 'enemy':
-        GameControl.end();
-        this.node.parent.addChild(instantiate(this.endWindowPrefab));
-        break;
-      // case 'boost-mogu':
-      //   !(this.level <= MAX_FIRE_LEVEL) || (this.fireLevel += 1);
-      //   break;
-      default:
-        break;
+    console.log("碰撞一次");
+    if (otherCollider.node.name.toLowerCase().includes("enemy")) {
+      console.log("end...");
+      this.node.parent.addChild(instantiate(this.endWindowPrefab));
+      GameControl.end();
+    } else if(otherCollider.node.name.toLowerCase().includes("boost")) {
+      if (fireMode.level < fireMode.MAX_FIRE_LEVEL) {
+        fireMode.level += 1;
+      } else {
+        (this.collectionProgressBar.progress > 1) || ( this.collectionProgressBar.progress += parseFloat((1/18).toFixed(3)));
+      }
+      !(fireMode.level < fireMode.MAX_FIRE_LEVEL) || (fireMode.level += 1);
+      
     }
     
   }

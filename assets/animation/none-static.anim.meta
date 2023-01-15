@@ -2,12 +2,12 @@
   "ver": "2.0.3",
   "importer": "animation-clip",
   "imported": true,
-  "uuid": "560e5842-abe6-44c9-a49d-5243f0b54483",
+  "uuid": "25c50020-0d76-4565-bd66-0cbcf663e8e3",
   "files": [
     ".cconb"
   ],
   "subMetas": {},
   "userData": {
-    "name": "idle"
+    "name": "none-static"
   }
 }

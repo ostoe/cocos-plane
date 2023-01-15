@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "boost-mogu",
+    "_name": "boost-star",
     "_objFlags": 0,
     "_native": "",
     "data": {
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "boost-mogu",
+    "_name": "boost-star",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -31,10 +31,16 @@
       },
       {
         "__id__": 8
+      },
+      {
+        "__id__": 10
+      },
+      {
+        "__id__": 12
       }
     ],
     "_prefab": {
-      "__id__": 10
+      "__id__": 14
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -51,8 +57,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 0.75,
-      "y": 0.75,
+      "x": 0.5,
+      "y": 0.5,
       "z": 1
     },
     "_layer": 33554432,
@@ -115,7 +121,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "75f0a146-3c97-434b-b1d6-a240df56dd1d@f9941",
+      "__uuid__": "4e12c2f9-0fa6-4a14-82eb-9f0bea675474@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -149,7 +155,7 @@
       "__id__": 7
     },
     "angle": 0,
-    "speed": 200,
+    "speed": 300,
     "_id": ""
   },
   {
@@ -184,6 +190,55 @@
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "fcwYkcasJGjaXqDQThwEN/"
+  },
+  {
+    "__type__": "cc.AudioSource",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 11
+    },
+    "_clip": {
+      "__uuid__": "7a7e823c-556a-45b5-9b22-d3855ce0d452",
+      "__expectedType__": "cc.AudioClip"
+    },
+    "_loop": false,
+    "_playOnAwake": false,
+    "_volume": 1,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "550lT+A+5D/qNGyc8oS4FS"
+  },
+  {
+    "__type__": "cc.Animation",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 13
+    },
+    "playOnLoad": false,
+    "_clips": [
+      {
+        "__uuid__": "065accb5-284c-48d7-9757-59e3f32a67f2",
+        "__expectedType__": "cc.AnimationClip"
+      }
+    ],
+    "_defaultClip": null,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "41tXil+mFMxpDTXornDcVo"
   },
   {
     "__type__": "cc.PrefabInfo",

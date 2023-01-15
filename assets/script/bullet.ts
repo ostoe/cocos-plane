@@ -34,7 +34,6 @@ export class Bullet extends Component {
   }
 
   onBeinContact() {
-    GameControl.addScore();
     this._removeFromParent();
   }
 
@@ -63,7 +62,7 @@ export class Bullet extends Component {
   }
 
   _removeFromParent() {
-    // this.node.removeFromParent();
+    this.node.removeFromParent();
     bulletPool.put(this.node);
   }
 }
