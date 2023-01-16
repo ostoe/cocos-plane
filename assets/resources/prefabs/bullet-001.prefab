@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "bullet",
+    "_name": "bullet-001",
     "_objFlags": 0,
     "_native": "",
     "data": {
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "bullet",
+    "_name": "bullet-001",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -115,7 +115,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "53e4a1aa-7a0b-4ea3-a269-5a18493d971c@f9941",
+      "__uuid__": "a9f6adbd-100d-49d5-b0f4-78fdf298c6a1@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -156,13 +156,13 @@
     "_restitution": 0,
     "_offset": {
       "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
+      "x": 0.3,
+      "y": 3.8
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 27.3,
-      "height": 50.1
+      "width": 26,
+      "height": 47.3
     },
     "_id": ""
   },

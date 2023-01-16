@@ -15,11 +15,21 @@ TODO
 飞机移动有问题！
 
 
+执行顺序：
+未加入node节点的时候：reset
+加入后先后执行onLoad start
+
+如果node是play动画的！那么从nodepool里面出来以后不会执行onLoad() start() 动画已经到结尾了！怎么办？？;
+
+https://blog.csdn.net/m0_48771430/article/details/121585763
+
+
 ## 计划
 
 
 1. 子弹：
  - 小子弹 逐渐变大
+ - 放大版子弹
  - 多种样式混合
  - 一次发射固定排列的子弹，比如 
      | |

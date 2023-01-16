@@ -49,6 +49,7 @@ export class Game extends Component {
 
   boostStar: Prefab;
   boostMogu: Prefab;
+  bomAni: Prefab;
 
 
   start() {
@@ -60,6 +61,10 @@ export class Game extends Component {
       if (!err) this.boostMogu = prefab
       else console.log("加载预制资源[boostStar]失败")
       });
+    resources.load("prefabs/bom", Prefab, (err, prefab) => {
+        if (!err) this.bomAni = prefab 
+        else console.log("加载预制资源[bom]失败")
+        });
 
     this.prefabList = [this.planPrefab_0, this.planPrefab_1, this.planPrefab_2, this.planPrefab_3, this.planPrefab_4]
     this.enemyPoolList = [
@@ -80,6 +85,7 @@ export class Game extends Component {
 
   doIt() {
     const plane = this.genreteEnemy();
+    // console.log("will add");
     this.planeViewPool.addChild(plane);
   }
 
@@ -101,14 +107,15 @@ export class Game extends Component {
       }
     }
     let plane: Node = this.enemyPoolList[index].get();
-      plane = instantiate(this.prefabList[index]);
+    // console.log("will ins");
+    plane = instantiate(this.prefabList[index]);
     if (!plane) {
       plane = instantiate(this.prefabList[index]);
     }
     if (fireMode.level < fireMode.MAX_FIRE_LEVEL) {
-      plane.getComponent(Enemy).reset(this.boostStar);
+      plane.getComponent(Enemy).reset(this.boostStar, this.bomAni);
     } else {
-      plane.getComponent(Enemy).reset(this.boostMogu);
+      plane.getComponent(Enemy).reset(this.boostMogu, this.bomAni);
     }
     return plane;
   }

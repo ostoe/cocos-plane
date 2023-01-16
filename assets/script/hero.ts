@@ -18,7 +18,7 @@ import {
   ProgressBar,
 } from "cc";
 import { Bullet } from "./bullet";
-import { bulletPool, fireMode, GameControl } from "./const";
+import { PublicBulletPool, fireMode, GameControl } from "./const";
 const { ccclass, property } = _decorator;
 const BULLET_LEVEL = {
   0: [0],
@@ -58,6 +58,10 @@ export class Hero extends Component {
   bulletPrefab: Prefab;
 
   @property(Prefab)
+  bulletPrefab_1: Prefab;
+
+
+  @property(Prefab)
   endWindowPrefab: Prefab;
 
   @property(Node)
@@ -74,30 +78,35 @@ export class Hero extends Component {
   private level: number = 1;
   // public fireLevel = 0;
   private collectionProgressBar: ProgressBar;
+  childrenNodeActive = false;
   onLoad() {}
 
   start() {
     const collider = this.getComponent(BoxCollider2D);
     collider.on(Contact2DType.BEGIN_CONTACT, this.onBeinContact, this);
     this.collectionProgressBar = this.node.children[0].getComponent(ProgressBar);
-    console.log(this.collectionProgressBar);
+    // console.log(this.collectionProgressBar);
     this.collectionProgressBar.progress = 0;
+    this.node.children.forEach(e=>e.active = false)
   }
 
   onBeinContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
     // console.log(selfCollider.node, otherCollider.node.name,  )
-    console.log("碰撞一次");
+    // console.log("碰撞一次");
     if (otherCollider.node.name.toLowerCase().includes("enemy")) {
-      console.log("end...");
+      
       this.node.parent.addChild(instantiate(this.endWindowPrefab));
       GameControl.end();
     } else if(otherCollider.node.name.toLowerCase().includes("boost")) {
       if (fireMode.level < fireMode.MAX_FIRE_LEVEL) {
         fireMode.level += 1;
       } else {
+        if (!this.childrenNodeActive) {
+          this.node.children.forEach(e=>e.active = true);
+          this.childrenNodeActive = !this.childrenNodeActive;
+        }
         (this.collectionProgressBar.progress > 1) || ( this.collectionProgressBar.progress += parseFloat((1/18).toFixed(3)));
       }
-      !(fireMode.level < fireMode.MAX_FIRE_LEVEL) || (fireMode.level += 1);
       
     }
     
@@ -154,10 +163,10 @@ export class Hero extends Component {
   }
 
   generateBullet(angle: number) {
-    
-    let b = bulletPool.get(); // 有返回Node
+    let tmpPrefab = angle == 0 ? this.bulletPrefab_1 : this.bulletPrefab;
+    let b = PublicBulletPool.getPoolByName(tmpPrefab.name).get()
     if (!b) { // 有Node对象
-      b = instantiate(this.bulletPrefab);
+      b = instantiate(tmpPrefab);
     }
     b.getComponent(Bullet).fixedAngle(angle)
     b.setPosition(this.node.position);

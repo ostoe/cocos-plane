@@ -1,9 +1,9 @@
 import { director, game, NodePool, view, Prefab } from "cc";
 
 export const bulletPool = new NodePool();
-export const planetPool = new NodePool();
+// export const planetPool = new NodePool();
 // export const PublicBoostPool = new NodePool();
-export const fireMode = {level: 2, MAX_FIRE_LEVEL: 10, DEFAULT_Level: 2, GenBoostThreshold: 0.5};
+export const fireMode = {level: 0, MAX_FIRE_LEVEL: 10, DEFAULT_Level: 0, GenBoostThreshold: 0.2};
 export const screenSize = view.getVisibleSize()
 
 export class GameControl {
@@ -16,9 +16,10 @@ export class GameControl {
   public static restart() {
     fireMode.level = fireMode.DEFAULT_Level;
     bulletPool.clear();
-    planetPool.clear();
+    // planetPool.clear();
     PublicNodePool.clear();
-    PublicBoostPool.clear()
+    PublicBoostPool.clear();
+    PublicBulletPool.clear();
     GameControl.score = 0;
     director.resume();
     game.restart();
@@ -61,6 +62,24 @@ export class PublicBoostPool {
   }
   public static clear() {
     PublicBoostPool.NodePools = {}
+  }
+
+}
+
+export class PublicBulletPool {
+
+  public static NodePools  = {}
+  public static getPoolByName(obj: string): NodePool {
+    if (PublicBulletPool.NodePools[obj]) {
+      return PublicBulletPool.NodePools[obj]
+    } else {
+      let tmpPool = new NodePool();
+      PublicBulletPool.NodePools[obj] = tmpPool
+      return tmpPool;
+    }
+  }
+  public static clear() {
+    PublicBulletPool.NodePools = {}
   }
 
 }
