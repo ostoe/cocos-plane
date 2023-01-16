@@ -103,7 +103,7 @@ export class Hero extends Component {
       } else {
         if (!this.childrenNodeActive) {
           this.node.children.forEach(e=>e.active = true);
-          this.childrenNodeActive = !this.childrenNodeActive;
+          this.childrenNodeActive = true;
         }
         (this.collectionProgressBar.progress > 1) || ( this.collectionProgressBar.progress += parseFloat((1/18).toFixed(3)));
       }

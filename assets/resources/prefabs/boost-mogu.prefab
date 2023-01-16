@@ -229,12 +229,12 @@
     "playOnLoad": false,
     "_clips": [
       {
-        "__uuid__": "f8d66849-9d9c-40a8-99dd-9c5a2ff24d88",
+        "__uuid__": "eb01a28c-8939-4e02-94f5-77ba68ed7338",
         "__expectedType__": "cc.AnimationClip"
       }
     ],
     "_defaultClip": {
-      "__uuid__": "f8d66849-9d9c-40a8-99dd-9c5a2ff24d88",
+      "__uuid__": "eb01a28c-8939-4e02-94f5-77ba68ed7338",
       "__expectedType__": "cc.AnimationClip"
     },
     "_id": ""

@@ -1,5 +1,5 @@
 import { _decorator, Component, Node, AudioSourceComponent,
-    Animation,
+    Animation, 
 
 
 
@@ -13,9 +13,10 @@ export class BomCommon extends Component {
     private _animation: Animation;
     private _audio: AudioSourceComponent;
     start() {
-        console.log("- ani start", this.node.position.x, )
+        // console.log("- ani start", this.node.position.x, )
         this._animation = this.getComponent(Animation);
         this._audio = this.getComponent(AudioSourceComponent);
+
         // this.reset();
         this._animation.on(
         Animation.EventType.FINISHED,
@@ -25,12 +26,13 @@ export class BomCommon extends Component {
     }
 
     onLoad() {
-        console.log("- ani onLoad",)
+        // console.log("- ani onLoad",);
     }
 
 
-    reset(x: number, y: number) {
-        this.node.setPosition(x, y);
+    replay() {
+
+        this._animation.play();
         
     }
 
@@ -38,11 +40,11 @@ export class BomCommon extends Component {
     }
 
     _removeFromParent() {
-        setTimeout(() => {
-            console.log("回收统计:", this.node.position.x)
+        // setTimeout(() => {
+            // console.log("回收统计:", this.node.position.x)
             this.node.removeFromParent();
             PublicNodePool.getPoolByName(this.node.name).put(this.node)
-        }, 5000);
+        // }, 3000);
         
       }
 }

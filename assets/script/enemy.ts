@@ -58,11 +58,7 @@ export class Enemy extends Component {
     this._HP = this.HP;
     this._animation = this.getComponent(Animation);
     this._audio = this.getComponent(AudioSourceComponent);
-    this._animation.on(
-      Animation.EventType.FINISHED,
-      () => this._removeFromParent(true),
-      this
-    );
+
     // this.reset();
     // const collider = this.getComponent(BoxCollider2D);
     // collider.on(Contact2DType.BEGIN_CONTACT, this.onBeinContact, this);
@@ -78,6 +74,11 @@ export class Enemy extends Component {
     // this.compareObj(this._animation.clips[1], this._animation.clips[2])
     // default
     // console.log("start");
+    this._animation.on(
+      Animation.EventType.FINISHED,
+      () => this._removeFromParent(true),
+      this
+    );
   }
 
   compareObj(a, b) {
@@ -98,7 +99,7 @@ export class Enemy extends Component {
   reset(boost: Prefab, bom: Prefab) {
     // console.log("reset");
     this.bomAnimation = bom
-    this.node.active = true;
+    // this.node.active = true;
     this.boost = boost;// 必须先执行
     const collider = this.getComponent(BoxCollider2D);
     collider.on(Contact2DType.BEGIN_CONTACT, this.onBeinContact, this);
@@ -124,16 +125,23 @@ export class Enemy extends Component {
     // this._animation.play("bom");
     // console.log("boom-posi:", this.node.position.x)
     GameControl.addScore(this.HP);
-    this.node.active = false;
     // setTimeout(() => {
     //   this._removeFromParent();
     // }, 2000);
     // console.log("- bom", this.node.position.x)
     let anyPrefab = PublicNodePool.getPoolByName(this.bomAnimation.name).get();
     // console.log("prefab:", anyPrefab ? anyPrefab.name : "null");
-    anyPrefab || (anyPrefab = instantiate(this.bomAnimation))
-    anyPrefab.setPosition(this.node.position);
-    this.node.parent.addChild(anyPrefab)
+    if (anyPrefab) {
+      anyPrefab.setPosition(this.node.position);
+      this.node.parent.addChild(anyPrefab)
+      anyPrefab.getComponent(BomCommon).replay();
+    } else {
+      anyPrefab = instantiate(this.bomAnimation);
+      anyPrefab.setPosition(this.node.position);
+      this.node.parent.addChild(anyPrefab)
+    }
+    
+    // console.log(this.node.parent.children.length)
     if (this.node.parent.children.length == 20) {
       // console.log("      :", this.node.parent.children);
 
@@ -143,16 +151,17 @@ export class Enemy extends Component {
   }
 
   _removeFromParent(isGenBoost: boolean) {
-    if (isGenBoost && Math.random() <  0){// this.GenBoostThreshold) { // 0.1/(fireMode.level + 1) ) {
+    if (isGenBoost && Math.random() <  this.GenBoostThreshold) { // 0.1/(fireMode.level + 1) ) {
         // setTimeout(() => { // 闪过爆炸画面
-          let b = PublicBoostPool.getPoolByName(this.boost.name).get();
-          if (b) {
-            b.getComponent(BoostMoguStar).reset();
+          let anyPrefab = PublicBoostPool.getPoolByName(this.boost.name).get();
+          if (anyPrefab) {
+            anyPrefab.getComponent(BoostMoguStar).reset();
           } else {
-            b = instantiate(this.boost);
+            anyPrefab = instantiate(this.boost);
           }
-          b.setPosition(this.node.position);
-          this.node.parent.getComponent(planeViewPool).node.addChild(b); // 加到PlaneViewPool;
+          // console.log("ori pos", this.node.position);
+          anyPrefab.setPosition(this.node.position);
+          this.node.parent.getComponent(planeViewPool).boostViewPool.addChild(anyPrefab); // 加到PlaneViewPool;
           // this.node.parent.addChild(b)
         // }, 0.4);
     }
@@ -160,7 +169,7 @@ export class Enemy extends Component {
     // console.log("callb-posi:", this.node.position.x, this);
     // setTimeout(() => {
       // console.log("- bom remove ", this.node.position.x)
-      this.node.removeFromParent();
+      // this.node.removeFromParent();
       PublicNodePool.getPoolByName(this.node.name).put(this.node)
     // }, 5000);
   }

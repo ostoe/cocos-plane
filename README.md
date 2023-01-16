@@ -11,7 +11,8 @@ TODO
 
 
 ## 
-星星消失动画
+星星消失动画 [done]
+测试play idle无效 蘑菇和星星都有这样的问题！
 飞机移动有问题！
 
 
@@ -21,7 +22,7 @@ TODO
 
 如果node是play动画的！那么从nodepool里面出来以后不会执行onLoad() start() 动画已经到结尾了！怎么办？？;
 
-https://blog.csdn.net/m0_48771430/article/details/121585763
+
 
 
 ## 计划

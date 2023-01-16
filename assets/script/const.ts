@@ -3,7 +3,7 @@ import { director, game, NodePool, view, Prefab } from "cc";
 export const bulletPool = new NodePool();
 // export const planetPool = new NodePool();
 // export const PublicBoostPool = new NodePool();
-export const fireMode = {level: 0, MAX_FIRE_LEVEL: 10, DEFAULT_Level: 0, GenBoostThreshold: 0.2};
+export const fireMode = {level: 0, MAX_FIRE_LEVEL: 10, DEFAULT_Level: 0, GenBoostThreshold: 0.8};
 export const screenSize = view.getVisibleSize()
 
 export class GameControl {
